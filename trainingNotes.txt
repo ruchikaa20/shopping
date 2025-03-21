@@ -1,0 +1,4033 @@
+Map Collection
+Java 8 Features -> Default, Static (New changes -> Interface)
+Lambda Expressions -> search() -> (->)
+Functional Interface
+Multithreading
+Serialisation
+
+----------------------------------------------------------
+
+Assignment :
+
+-> BankAccount -> withdraw -> implement synchronization 
+
+----------------------------------------------------------
+
+Map 
+
+-> does not actually extend Collectio Interface
+-> part og JCF -> java Collection Framework
+-> store data in key value pairs
+-> Map<Key, Value>
+-> product -> id, name, price,
+
+Key -> Value associated with key
+keys are unique
+
+-> fast lookup operations
+-> large amount of data -> freq retrieve operations
+-> methods -> put(K,V) -> add a key-value pair
+           -> get(K) -> 
+           -> remove(K)
+           -> containsKey(K) -> key is present
+           -> containsValues -> Value is present or not
+           
+-> Key -> can key be null? null value
+-> Values -> multiple null values are permitted
+
+-> implementation classes
+-> HashMap -> most used -> 
+
+HashMap -> unordered
+        -> null key is possible
+        -> multiple null values are possible
+        -> have a fast lookup
+
+LinkedHashMap -> Double Linked List -> maintain insertion order
+              -> > null key is possible
+        -> multiple null values are possible
+        -> 
+
+
+TreeMap -> sorted Map -> based on keys -> prodId as key -> ascending order -> Comparable Interface internally
+       -> no null key is possible
+       -> null values are possible
+
+--------------------------------------------------------------------------------------------------
+
+Multithreading :
+
+
+-> execute multiple thread concurrently
+-> program -> smallest part of program that can be executed independently
+-> t1, t2,---------------
+-> multi core processors -> 
+-> threads -> t1, t2, t3 -> 
+
+-> Food Order App 
+
+-> customer order -> t1 -> 30 sec
+-> payment made -> t2  -> 20 sec
+-> delivery agent is assigned -> t3 -> 15 sec
+
+-> all threads are executed - to complete the program
+
+
+-> to implement multithreading
+-> Thread class -> inbuilt class
+                -> run() -> executing code when particular thread starts
+                -> Override the run() method
+-> Runnable interface -> inbuilt interface
+                      -> run()
+-> when run() method executes -> start the thread -> start() method
+
+
+Food Delivery App
+
+-> class takeOrder extend Thread -> run() -> taking order , add sleep , order taken
+-> class process payment -> run() -> payment processing, add sleep, payment done
+-> class AssignDA -> run() -> assigning, sleep, DA assigned
+
+-> OrderApp -> objects of three classes
+
+-> thread -> start , join 
+
+--------------------------------------------------------------------
+
+Serialisation :
+
+-> process of converting object's state into a byte stream -> write it to a file -> share it across a network
+-> persistent storage -> person.ser file
+
+Deserialization
+
+-> byte stream in a file
+-> convert it back to object state
+-> print object
+
+
+inbuild Seriazable -> interface -> Person Class ->  implement
+----------------------------------------------------------------------
+
+Java 8 Features -> 
+
+-> Lambda Expressions 
+-> Functional Interface
+-> forEach
+-> Stream API 
+  -> process collections without writing loops
+  -> stream -> chain operations on collections
+  -> filter() -> 10 original -> 
+  -> map() -> mapping every value to some new operation   
+
+-> [12,3,56,89] -> filter out even numbers -> collection
+-> [12,34,67,89] -> increment each number by 10 -> collect to list 
+-> [12,34,56,89] -> add up all numbers
+
+----------------------------------------------------------------------
+
+Method References :
+
+-> shorthand reference :: operator
+-> Math :: 
+
+-> Static MEthod Ref
+   -> class -> static method -> class ->
+   -> call it using a classname
+   -> refer to a static method using ref operator
+   -> Product -> static method -> print 
+   -> Product :: printTest (static method defined in Product Class)
+
+-> Instance method reference
+
+-> instance Method ref -> to arbitrary object -> not creating an object
+
+    //length of string
+        names.forEach(String :: length); // String -> inbuilt , length, toUpperCase
+   -> length method of inbuilt String class
+        
+
+-> Constructor Reference
+
+   -> FunctionalInterface -> inbuilt
+
+--------------------------------------------------------------------------
+
+Codes :
+
+package MultithreadingSer;
+
+public class Counter {
+	
+	private int count=0;
+
+	public int getCount() {
+		return count;
+	}
+
+	public void setCount(int count) {
+		this.count = count;
+	}
+	
+	public synchronized void incrementCount() {
+		count++;
+	}
+
+}
+
+-----------------------------------------------------------
+
+package MultithreadingSer;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+
+public class DeserializationApp {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		
+		// person.ser
+		// input operation
+		// byte -> object
+		// IOException, FileNotFound
+		
+		try {
+			
+			FileInputStream file = new FileInputStream("person.ser");
+			ObjectInputStream in = new ObjectInputStream(file);
+			
+			Person person = (Person) in.readObject();
+			in.close();
+			file.close();
+			
+			System.out.println("Deserialized : "+person);
+		}
+		catch (IOException | ClassNotFoundException e) {
+			System.out.println("Exception Cught : "+e.getMessage());
+		}
+	
+
+	}
+
+}
+-------------------------------------------------------------------
+
+package MultithreadingSer;
+
+import java.io.Serializable;
+
+public class Person implements Serializable{
+	
+	private String name;
+	private int id;
+	
+	public Person(String name, int id) {
+		super();
+		this.name = name;
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	@Override
+	public String toString() {
+		return "Person [name=" + name + ", id=" + id + "]";
+	}
+
+	
+	
+	
+	
+
+}
+----------------------------------------------------------
+
+package MultithreadingSer;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+
+public class SerializationApp {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		
+		Person objP =  new Person("Vandana",12345);
+		
+		// File - IOException
+		
+		try {
+			
+			// serialization
+			// Output to a file
+			FileOutputStream file = new FileOutputStream("person.ser");
+			ObjectOutputStream out = new ObjectOutputStream(file);
+			
+			out.writeObject(objP);
+			out.close();
+			file.close();
+			
+			System.out.println("Object is serialized.");
+			
+		}
+		catch (IOException e ) {
+			
+			System.out.println("Exception Caught : "+ e.getMessage());
+		}
+		
+		
+		// Output
+
+	}
+
+}
+
+-----------------------------------------------------
+
+package MultithreadingSer;
+
+public class TestThread implements Runnable {
+
+	@Override
+	public void run() {
+		
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+		System.out.println("Thread is running from Runnable." + Thread.currentThread().getName());
+		
+		
+	}
+
+	
+}
+------------------------------------------------------
+
+package MultithreadingSer;
+
+public class TestThread2 extends Thread{
+	
+	@Override
+	public void run() {
+		
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("Thread is running from Thread Class. "+ Thread.currentThread().getName());
+		
+	}
+
+
+}
+
+-----------------------------------------------------------------------
+
+package MultithreadingSer;
+
+public class ThreadApp {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		
+		Counter objC = new Counter();
+		
+		TestThread2 t1 =  new TestThread2(); //from Thread class
+		
+		// instance of runnable
+		TestThread runnable = new TestThread();
+		Thread t2 = new Thread(runnable);
+		
+		Thread t3 =  new Thread ( () -> {
+		                             for(int i=0; i< 5 ; i++) {
+		                            	 objC.incrementCount();
+		                             } 
+		                            } 
+		                          );     
+		
+		Thread t4 =  new Thread ( () -> {
+            for(int i=0; i< 4 ; i++) {
+           	 objC.incrementCount();
+            } 
+           } 
+         );  
+		                         	  
+						
+		// start the threads
+		//t1.start();
+		//t2.start();
+		t3.start();
+		t4.start();
+		
+		// thread -> join()
+		
+		// wait for threads to complete
+		try {
+			//t1.join(); // signalling main program
+			//t2.join();
+			t3.join();
+			t4.join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println(objC.getCount());
+		
+		System.out.println("Process Completed.");
+
+	}
+	
+	// synchronization -> 
+	// shared BankAccount -> users 2 
+	// balance - 1000
+	// user 1 -> t1 -> withdraw - 100
+	// user 2 -> parallel another thread -> t2 -> withdraw -> 200 -> 1200
+	// inconsistent balance
+
+	// method synchronisation -> keyword synchronized  -> all threads can work but at one time only one thread can execute
+	
+}
+--------------------------------------------------------------------
+
+package Java8Features;
+
+import java.security.cert.CollectionCertStoreParameters;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@FunctionalInterface // can be implemnted using lambda expression
+interface Maths {
+	
+	int operate(int a, int b); // single abstarct methods
+	// Functional Interface -> single abstarct methods
+	// int operate2(double c);
+}
+
+// forEach loop -> simplify -> iteration over arrays, collections
+// more shorter code, more readable
+
+
+
+public class Java8Features {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		
+		// Lambda Expressions -> short and concise way of defining functionality
+		// checkEvenOrOdd -> 
+		// (Parameters) -> operational Logic
+		
+        Maths add = (a,b)->a+b;
+        System.out.println(add.operate(23, 560));
+        
+        Maths sub = (a,b) -> a-b;
+        
+        List<String> names = Arrays.asList("hname1","uname2","cname3");
+        List<String> names2 = new ArrayList<>();
+        List<Integer> numbers = List.of(1,2,3,4,5,6,7,8,9,10);
+        List<Integer> evenNumbers = numbers.stream() // converted it to stream of values
+        		                           .filter(n -> n%2== 0) // filtering out even numbers
+        		                           .collect(Collectors.toList());
+        List<Integer> incNumbers = numbers.stream() // converted it to stream of values
+                                          .map(n -> n+10) // filtering out even numbers
+                                          .collect(Collectors.toList());
+        // .sum()
+        
+        int resultSum =  numbers.stream()       
+        		               .map(n->n*2)
+        		               .mapToInt(Integer::intValue)
+        		               .sum();
+        
+        int resultSum2 =  numbers.stream()       
+	               .map(n->n++) //1->1++ 
+	               // postfix i++-> assign first inc next, ++i -> inc first, assign next
+	               .mapToInt(Integer::intValue)
+	               .sum();
+
+        
+        System.out.println(resultSum);
+        		
+        names2.add("Java");
+        names2.add("Trainig");
+                
+        names.sort((s1,s2) -> s1.compareTo(s2));
+        System.out.println(names);
+        System.out.println(evenNumbers);
+        System.out.println(incNumbers);
+        
+        names2.stream()
+              .map(String :: length)
+              .forEach(System.out :: println);
+        
+        
+        //length of string
+        names.forEach(String :: length); // String -> inbuilt , length, toUpperCase
+        
+        
+
+	}
+
+}
+------------------------------------------------------------------
+
+package Java8Features;
+
+public class Product {
+	
+	private String name;
+	private String category;
+	private double price;
+	
+	public Product(String name, String category, double price) {
+		super();
+		this.name = name;
+		this.category = category;
+		this.price = price;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getCategory() {
+		return category;
+	}
+	public void setCategory(String category) {
+		this.category = category;
+	}
+	public Double getPrice() {
+		return price;
+	}
+	public void setPrice(Double price) {
+		this.price = price;
+	}
+	@Override
+	public String toString() {
+		return "Product [name=" + name + ", category=" + category + ", price=" + price + "]";
+	}
+	
+	
+	
+	
+	
+	
+
+}
+---------------------------------------------------------
+
+package Java8Features;
+
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class ProductApp {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		
+		List<Product> products = List.of(
+				
+				new Product("Laptop","Electronis",45000.00),
+				new Product("Headphones","Electronis",55000.00),
+				new Product("Iphone", "electronics", 10000.00),
+				new Product("maggie", "grocery", 250.00),
+				new Product("Shoe", "Footwear", 5500.00)				
+				
+				
+				);
+				
+		
+		// Stream -> filteration
+		// filter -> by price -> 5000 and 50000
+		List<Product> filteredProducts = products.stream() 
+				                                 .filter(product -> product.getPrice() >5000.0 && product.getPrice() <=50000)
+				                                 .collect(Collectors.toList());
+		
+		// sort by Price
+		List<Product> sortedProducts = products.stream()
+				                               .sorted(Comparator.comparingDouble(Product::getPrice))
+				                               .collect(Collectors.toList());
+		
+       System.out.println(filteredProducts);
+       sortedProducts.forEach(product -> System.out.println(product));
+       
+       // products -> map -> products -> uppercase -> toUpperCase() -> store that in List<String>
+       // double -> average price of products
+       /*  int resultSum =  numbers.stream()       
+        		               .map(n->n*2)
+        		               .mapToInt(Integer::intValue)
+        		               .sum();*/
+       double avgPrice = products.stream()
+    		                     .mapToDouble(Product::getPrice)
+    		                     .average()
+    		                     .orElse(0);
+       
+	}
+
+}
+-----------------------------------------------------------
+
+package Java8Features;
+
+public class Test {
+	
+	public void printStrLen(String str) {
+		System.out.println(str.length());
+	}
+
+}
+
+-----------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> Constructor Ref
+-> String Joiner
+-> Optional Class
+-> Parallel Sort
+-> Interface -> private methods
+
+RDBMS
+-> Overview, Basic Things
+-> MySQL, SQL
+
+2:15 -> Assessment -> few MCQs
+
+----------------------------------------------------
+
+Constructor Ref
+-> kind of method ref 
+-> refer to constructor -> create some object
+-> how to use constructor ref
+-> ClassName :: new -> corresponds to calling constructor of classname that you mentioned
+-> HashMap -> 
+-> used in Functional Interfaces
+   -> apart from creating, inbuilt functional interfaces - Function(inbuilt Functional Interface)
+                                                         - Supplier
+                                                         - BiFunction  
+
+Codes :
+
+package Java8Features;
+
+public class Employee {
+	
+	private String name;
+	private int empId;
+	
+    public Employee() {
+		
+		System.out.println("No paramter constructor called.");
+		
+	}
+	
+	
+	public Employee(String name, int empId) {
+		this.name = name;
+		this.empId = empId;
+		System.out.println("Two params constructor called.");
+	}
+	
+	public Employee(String name) {
+		
+		
+		this.name = name;
+		System.out.println("Name : "+name +" created.");
+	}
+	
+	
+
+}
+
+-----------------------------------------------------------------
+
+
+package Java8Features;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.function.Supplier;
+
+public class ConstructorRef {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		
+		Map<String,Integer> employees = new HashMap<>();
+		employees.put("Name1",123);
+		employees.put("Name2",234);
+		employees.put("Name3",123);
+		
+		// Lambda Exp
+		//employees.keySet().forEach(name -> new Employee(name));
+		System.out.println("------------------------------");
+		//constructor ref 
+		//employees.keySet().forEach(Employee :: new);
+		
+        // BiFunction, Supplier, Function
+		
+		// BiFunction -> BiFunction<T,U,R> -> Function -> two input paramters -> T and U and return result of type R
+		//            -> name , id -> R
+		
+		BiFunction<String,Integer,Employee> employee = (name,id)-> new Employee(name,id); //lambda Expression
+		employee.apply("Name1", 123);
+		BiFunction<String,Integer,Employee> employee2 = Employee :: new; //Construtor ref
+		employee2.apply("Name4", 1234);
+		
+		// Supplier -> Supplier<T> -> represents a function that does not take any argument but returns an object of type T
+		//          -> Supplier<Employee>
+		Supplier<Employee> empS = ()->new Employee(); //lambda expr
+		empS.get();
+		Supplier<Employee> empS2 = Employee :: new; // constructor ref
+		empS2.get();
+		
+		//Function -> Function<T,R> -> take one paramter of tyoe T and return object of type R
+		Function<String,Employee> empF = Employee ::new;
+		empF.apply("NameN");
+	}
+
+}
+
+
+--------------------------------------------------------------------------------------------------------
+
+RDBMS
+
+-> Theory
+-> query 
+-> Online Shopping System Database
+
+-> Relational Database Mgmt System - RDBMS
+-> Tables
+-> works with structured data
+-> employees -> class -> name, id, dept, salary -> 4 columns of table employee, varchar
+
+-> NoSQL Database -> MongoDB -> data is unstructured -> emp1 -> 4  values, emp2 -> 6 values
+
+-> Features :
+
+-> Structured Data - in form of tables
+
+-> Relationship among tables -> Keys -> Foreign Keys, Primary Key(PK) -> unique column + not null
+                                              |(FK)             |
+                                                      uniquely identifies a row
+
+-> Foreign Key -> Relates one table with another table
+-> Employee -> empid -> information -> PK
+-> Projects Allocated Table-> Project Id (PK) -> information, empid (FK)
+
+-> SQL Support -> Structured Query Language - retrieve from tables, store info, update 
+-> MYSQL -> Database -> interact with this database
+         -> SQL is used for that
+
+-> Concurrency Control -> multiple transactions can execute simultaneously
+-> Security -> user authentication , access control
+
+-> ACID Properties
+-> Atomicity -> (All or Nothing)
+   -> deducting amount from BankAcc A
+   -> Add it to BankAcc B
+-> Consistency -> before transaction -> valid state, after transaction -> valid state
+-> Integrity -> Concurrent Transactions -> They should not interfere
+             -> shared bankacc -> holder1 - withdrawl, holder2 - withdrawl, dirty reads
+-> Durability -> Changes are permanent
+              -> saved
+
+
+MySQL 
+
+-> RDBMS
+-> Cross Platform Compability
+-> Scalable -> small to enterprise level org
+-> High Performance -> Read/Write fast
+-> Security ->
+-> Integration -> Java, Python
+-> E-commerce, banking , finance, education, social media
+
+
+
+ Online Shopping System Database
+
+-> Create Database 
+-> Use Database
+
+1. Customers -> can register and place orders -> table -> Customer Entity
+2. Products -> price, category, stock
+3. Orders -> placed by multiple customers, multiple products
+4. Payments -> order is confirmed -> process payment
+
+Entities -> tables
+ER Model -> Entity Relationship Model
+
+SQL Commands 
+
+-> DDL -> Data Definition Language -> Creating The Database schema - layout
+-> DDL Commands :
+   -> CREATE - Create a database or table
+   -> Alter - Modify the existing Table
+   -> Drop - Delete table / Db - Deletes all data and then it deletes the structure
+   -> Truncate - Deletes only data, not the structure
+
+-> tables -> columns -> specify certain constraints -> rules/restrictions
+          -> NOT NULL -> 
+          -> Unique, Present
+          -> Check Constraint -> >0
+
+Customers Table :
+
+-> Create Table Customers (
+      
+           Customer_Id INT Primary Key Auto_increment,
+           Name Varchar(50) NOT NULL, 
+           Email Varchar(60) UNIQUE NOT NULL,
+           Phone Varchar(10) NOT NULL,
+           Address Text, 
+           Created_At TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  
+          );
+ 
+  
+Products Tables :
+
+-> Create Table Products (
+ 
+          Product_id INT Primary Key Auto_increment,
+          Name varchar(50) Not Null,
+          Description Text,
+          Price DECIMAL(10,2) Not Null Check (Price > 0),
+          Stock INT Not Null Check (Stock > 0),
+          Category Varchar(20),
+          Created_At TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+     
+         );
+
+DECIMAL -> DECIMAL(10,2) -> P,D
+        -> P-10 -> in total how many digits
+        -> D-2 -> in total how many digits after decimal
+        -> (10,2) -> 8 digits before decimal, 2 digits after decimal
+        -> (5,2) -> 789.95
+
+
+Orders Table 
+
+->  Create Table Orders (
+
+          Order_Id INT Primary Key Auto_increment,
+          Customer_id INT,
+          Order_Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          Status Enum('Pending', 'Shipped', 'Delivered', 'Cancelled') Default 'Pending',
+          Total_Amount Decimal(10,2) Not Null Check (Total_Amount >0),
+          Foreign Key (Customer_id) References Customers(Customer_Id) 
+        
+          );
+          
+
+
+
+ENUM -> Enumeration -> specific set of values, variable -> only from that set
+     -> Day of Week -> 7 days (1-7) (Mon - Sun)
+     -> Pending, Shipped, Delivered, Cancelled
+
+Relationship between Orders and Customers tables
+
+-> Shopping -> Each order can have multiple products
+
+-> 1:1, 1:Many, Many:Many
+
+Order_Items
+
+-> Create Table Order_Items (
+
+            Order_Item_Id INT Primary Key Auto_increment,
+            Order_id Int,
+            Product_id Int,
+            Quantity Int Not Null Check (Quantity > 0),
+            Subtotal Decimal(10,2) Not Null Check (Subtotal >0),
+            Foreign Key (Order_id) References Orders(Order_Id),
+            Foreign Key (Product_id) References Products(Product_id)
+    
+           );
+
+
+Payments Table
+
+-> Create Table Payments (
+           
+            Payment_Id INT Primary Key Auto_increment,
+            Order_id Int Unique,
+            Payment_Method Enum('Credit Card', 'Debit Card', 'Upi Payment', 'Net Banking'),
+            Payment_Status Enum('Pending', 'Completed', 'Failed') Default 'Pending',
+            Amount Decimal(10,2) Not Null Check (Amount >0),
+            Payment_Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            Foreign Key (Order_id) References Orders(Order_Id)
+
+           );
+
+-------------------------------------------------------------------------
+
+DDL Commands
+
+-> Alter -> make some changes to existing table structure
+
+Add new column -> Customers -> Age -> >=18
+
+Alter Table Customers Add Column Age Int Check(Age>=18)
+
+Modify existing columns
+
+Alter Table Customers Modify Column Name varchar(60);
+
+Drop a column
+
+Alter Table Customers Drop Column Age; 
+
+-----------------------------------------
+
+Drop 
+
+-> Delete the tables -> delete the entire data of table and structure also
+
+-> Drop table xyz;
+
+-------------------------------------------
+
+Truncate 
+
+-> Delete the entire data from the table without deleting structure of the table      
+
+----------------------------------------------   
+
+DML Commands -> Data Manipulation Language
+
+-> Insert data,
+-> Update data, -> 
+-> Delete data  ->     
+-> Retrieve data -> select command -> 
+
+Insert Command
+
+-> registering customers
+
+Insert into Customers (Name, Email, Phone, Address) 
+Values
+('Ankit','ankit@gmail.com','9867452310','Mumbai 147878'),
+('Ankita','ankita@gmail.com','7856458798','New Delhi 232323'),
+('Raman','raman@gmail.com','789045678','Jaipur 34567');
+
+-> we are adding catalog pf products
+
+Insert into Products (Name, Description, Price, Stock, Category)
+Values
+('Laptop', 'New HP Laptop',55000.00, 10, 'Electronics'),
+('Nike Shoes' , 'Running Shoes' , 5000.00, 5, 'Footwear'),
+('T-Shirt', 'Blue Collared T-shirt' , 2500.00, 3, 'Apparel');
+
+-> customers are going to place orders
+-> Only those customers can place orders who are registered
+
+Insert into Orders (Customer_id, Status, Total_Amount)
+Values
+(1, 'Pending' , 7500.00),
+(2, 'Shipped', 5000.00);
+
+-> every order id will have multiple items
+
+Insert into Order_Items (Order_id, Product_id, Quantity, Subtotal)
+Values
+(1, 2, 1, 5000.00),
+(1, 3, 1, 2500.00),
+(2, 1, 1, 55000.00);
+
+Payments Table -> orders -> 1, 2
+
+1 -> Completed CreditCard Amount
+2 -> Pending
+
+---------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+DML Commands -> Data Manipulation Language
+
+-> update -> update some data
+-> generally use it with where clause -> gives you certain condition
+
+update Customers
+Set Phone = '7890456784'
+WHERE Customer_Id = 3;
+
+update Products
+Set Stock=10
+Where Product_id = 3;
+
+-> Orders table -> Change status to Shipped -> id =1
+-> payments -> status to completed 
+
+
+Delete -> some data
+
+-> particular row delete from customers;
+Delete from customers where customer_id = 3;
+
+Delete some row from table where FK is used
+
+Select -> 
+
+All rows and Cols -> * 
+
+retrieve only few cols
+
+select Name, Price, Stock from products;
+
+select -> where clause
+
+List of orders which are completed / pending
+
+select * from orders where Status = 'Shipped';
+
+-----------------------------------------------------------
+
+DQL -> Data Query Language 
+
+-> Operators -> 
+   -> AND 
+select col1, col2 from orders where cond1 And cond2;
+cond1 and cond2 -> should be true
+
+-> OR -> any one condition true
+
+select * from 
+
+update products -> set stock as 15 for all them
+
+update products
+set stock = 20
+where Product_id IN (1,2);
+
+// (1,2,3,4)
+
+-> Functions -> 
+-> Group By
+-> Joins
+
+Where condition -> filter data
+
+retrieve data based on sorting
+
+-> ORDER By -> sorted based on certain column
+
+select * from products Order By Price; -> // default order asceding
+select * from products Order By Price DESC; -> descending order
+select * from products Order By Price ASC; -> ascending order
+
+select * from products Order By Name DESC; -> descending order
+
+----------------------------------------------------------------------------------------
+
+Aggregate Functions :
+
+-> perform calculations on a set of values -> return a single value.
+
+1. Count -> 
+
+-> select Count(*) from customers; -> Total numbers of customers ->
+
+select Count(*) As Total_Customers from customers; -> Alias name
+
+-> where condition
+
+select count(*) As Electronics_Total from products where category ='Electronics';
+
+2. SUM() -> calculate total
+
+-> select -> sum of total amount form orders table and display as total revenue
+
+3. AVG() -> cal average price
+
+-> select -> avg price of products from products table and display as Average_product_Price
+To
+4. MAX() -> Maximum value -> products fetch product with highest price
+5. MIN() -> Minimum value -> products fetch product with lowest price
+
+
+------------------------------------------------------------------------
+
+Group By Clause -> group records based on certain column :
+
+-> Customer -> place multiple orders
+-> Find Total Revenue  ->   by each customer
+
+Select Customer_id , Sum(Total_AMount) As Total_Spent
+From orders
+Group By Customer_id;
+
+-> Count of Orders -> how many are pending, shipped, cancelled, delivered
+
+Having Clause :
+
+Modify -> customers who generated revenue more than 50000.00
+       -> High Paying Customers
+
+
+Select Customer_id , Sum(Total_AMount) As Total_Spent
+From orders
+Group By Customer_id
+Having Total_Spent >= 50000.00;
+
+Select Name, Stock from Products
+having stock > 15;
+
+
+--------------------------------------------------------------------------------------------
+
+Joins -> 
+
+-> retrieving data from single table
+
+-> PK FK
+
+-> Joins combine data from multiple tables using Fks
+
+-> Table1, Table2 -> 
+
+Inner Join
+Left Join
+Right Join
+Full Join
+Self Join
+Cross Join
+
+Inner Join 
+
+-> Retrieve matching records from both tables :
+
+Fetch Orders with Customers Names
+
+-> OrderID  Name Total AMount
+
+Select Orders.Order_Id, Customers.Name, Orders.Total_AMount
+From Orders
+Inner Join Customers ON Orders.Customer_Id = Customers.Customer_id;
+
+
+
+Left Join
+
+-> Return all records from the Left Table and only matching record for the Right Table
+
+-> No values are there, then it is going to return null values
+
+-> Fetch all customers -> Name, Email, 
+   Orders -> Order Id , Total AMount 
+
+Select Customers.Name, Customers.Email, Orders.Order_id, Orders.Total_Amount
+From Customers
+LEFT JOIN Orders On Customers.Customer_ID = Orders.Order_id;
+
+
+Right Join
+
+-> Return all records from right table and only matching records from Left Table
+
+-> try with right join now
+
+Full Outer Join
+
+-> Combination of both left join and right join
+-> Return results from both the tables, even if not matching
+
+-> Fetch all customers, all orders 
+
+
+Select Customers.Name, Customers.Email, Orders.Order_id, Orders.Total_Amount
+From Customers
+LEFT JOIN Orders On Customers.Customer_ID = Orders.Order_id
+UNION
+Select Customers.Name, Customers.Email, Orders.Order_id, Orders.Total_Amount
+From Customers
+RIGHT JOIN Orders On Customers.Customer_ID = Orders.Order_id;
+
+-------------------------------------------------------------------
+
+Where , Group By , Having Clause :
+
+Q1 -> Fetch all customers who have not placed order
+
+ Name   | Email            | Order_id | Total_Amount |
+
+ Raman  | raman@gmail.com  |     NULL |         NULL |
+
+
+Q2 -> Retrieve customers who have placed more than one order
+
+-> Name, Email, OrderCount
+
+   Ankit         2
+   Ankita        2
+
+Q3 -> Fetch Products that have not been ordered.
+
+Name, Price, Stock
+
+-> Relate more than two tables
+
+-> Fetch Order Details with Customer Name and Product Name
+
+
+Select Orders.Order_id, Customers.Name, Products.Name, Order_Items.Quantity
+From Orders
+Inner Join Customers on Orders.Customer_id  = Customers.Customer_Id
+Inner Join Order_Items on Orders.Order_Id = Order_Items.Order_id
+Inner Join Products on Order_items.Product_id = Products.product_id;
+
+----------------------------------------------------------------------
+
+-
+-> Fetch Cust Name, Total Qty (Sum) , Total Amount , Order Status
+-> Group Data by customer name, order status
+-> 
+
+Select Customers.Name As CustomerName, Sum(Order_Items.Quantity) As TotalQuantity, 
+Orders.Status
+From Orders
+Inner Join Customers on Orders.customer_id  = Customers.customer_id
+Inner Join Order_Items On Orders.Order_id = Order_Items.Order_id
+Group By Customers.Name, Orders.Status;
+
+------------------------------------------------------------------------
+
+Self Join
+
+-> when a table joins with itself
+
+-> fetch customers -> who have placed orders on same day
+
+orders -join- orders
+
+select o1.customer_id As Customer1, o2.Customer_id As Customer2, o1.Order_date
+From orders o1
+Join orders o2 on o1.order_date = o2.order_date
+               AND o1.customer_id <> o2.customer_id;
+
+
+Cross Join
+
+-> Cartesian Product of two tables
+
+-> N M -> N X M 
+-> 3 4
+-> 1 -> 4
+-> 2 -> 4
+-> 3 -> 4
+
+-> No conditions specified
+
+Example -> Customers -> Products -> Analyze datasets, Recommendations
+
+Select Customers.Name As Customer_Name, Products.Name As Product_Name
+From Customers
+Cross Join Products;
+
+------------------------------------------------------------------------
+
+TCL -> 
+
+Transaction Control Language :
+
+-> manage transactions -> data integrity and consistency is maintained
+
+Commands in TCL:
+
+Start Transaction -> Begin transaction
+Commit -> save all changes permanently
+Rollback -> Revert changes since the last commit
+Savepoint -> Create a temp save state 
+Release Savepoint -> Deletes a savepoint
+Set autocommit -> enable autocommits / disable autocommits
+
+Transaction -> 
+
+bankacc A money sub A
+bankacc B added B
+
+-> ACID
+DELIMITER //
+
+SET AUTOCOMMIT  = 0; 
+Start Transaction;
+
+Insert into Orders (Customer_id, Status, Total_Amount)
+Values (2, 'Pending' , 21000.00);
+SAVEPOINT OrderCreated;
+
+Update Products Set Stock = 20;
+SAVEPOINT StockUpdated;
+
+Drop table test;
+
+ROLLBACK to Savepoint OrderCreated;
+
+Commit; 
+
+//
+
+------------------------------------------------------------
+
+Transaction :
+
+Functions, Set variables, if else
+
+DELIMITER //
+
+SET AUTOCOMMIT = 0;
+Start Transaction;
+
+Insert into Orders (Customer_id, Status, Total_Amount)
+Values (2, 'Pending' , 33000.00);
+
+
+SET @Order_Id = LAST_INSERT_ID();
+
+Insert into Order_items (Order_Id, Product_id, Quantity, SubTotal)
+Values (@Order_Id, 3, 2, 5000.00);
+
+Update Products SET stock = stock -2 where product_id = 3;
+
+Set @PaymentSuccess = TRUE;
+
+//
+
+DDL Commands - Schema of database 
+-> these are auto committed 
+  
+-------------------------------------------------------------------------------
+
+Stored Procedures -> SQL Block -> multiple SQL statements -> executed as a single unit
+
+DELIMITER//
+
+CREATE PROCEDURE PlaceOrder(IN customer_id INT, IN total_AMount decimal(10,2)) // method signature
+BEGIN -> {
+
+     INSERT into Orders(Customer_Id, Status, Total_Amount) Values (customer_id, 'Pending', total_AMount);
+      SELECT LAST_INSERT_ID() AS OrderId;
+
+
+END -> } //
+
+DELIMITER ;
+
+-> new order -> call PlaceOrder(2,45000); // call method 
+
+-----------------------------------------------------------------------------
+
+Create Procedure ProcessOrder (
+
+      IN customer_id INT,
+      IN Total_AMount Decimal(10,2),
+      IN Product_id Int,
+      IN Quantity INT,
+      IN SubTotal Decimal(10,2),
+      IN payment_success BOOLEAN
+ )
+ BEGIN
+     
+     DECLARE Order_Id INT;
+
+     Start Transaction;
+
+     Insert into Orders (Customer_id, Status, Total_Amount)
+     Values (customer_id, 'Pending' , 27000.00);
+
+
+     SET Order_Id = LAST_INSERT_ID();
+
+     Insert into Order_items (Order_Id, Product_id, Quantity, SubTotal)
+     Values (Order_Id, product_id, Quantity, SubTotal);
+
+     Update Products SET stock = stock - Quantity where product_id = product_id;
+
+     If payment_success THEN
+        Commit;
+     Else 
+        Rollback;
+     End If
+
+END //
+
+Call -> TRUE
+Call -> FALSE
+
+------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Views 
+Index
+String FUnctions
+Numeric Functions
+Date and TimeStamp
+Temporary Table
+Trigger
+Backup
+
+
+DELIMITER //
+
+CREATE PROCEDURE ProcessOrder5 (
+    IN customer_id INT,
+    IN Total_AMount DECIMAL(10,2),
+    IN prod_id INT,
+    IN Quantity INT,
+    IN SubTotal DECIMAL(10,2),
+    IN payment_success BOOLEAN
+)
+BEGIN
+    DECLARE Order_Id INT;
+
+    START TRANSACTION;
+
+    -- Insert into Orders table
+    INSERT INTO Orders (Customer_id, Status, Total_Amount)
+    VALUES (customer_id, 'Pending', Total_AMount);
+
+    -- Get the last inserted order ID
+    SET Order_Id = LAST_INSERT_ID();
+
+    -- Insert into Order_items table
+    INSERT INTO Order_items (Order_Id, Product_id, Quantity, SubTotal)
+    VALUES (Order_Id, prod_id, Quantity, SubTotal);
+
+    -- Update product stock
+    UPDATE Products 
+    SET stock = stock - Quantity 
+    WHERE product_id = prod_id;
+
+    -- Commit or Rollback transaction based on payment success
+    IF payment_success THEN
+        COMMIT;
+    ELSE 
+        ROLLBACK;
+    END IF;
+
+END //
+
+DELIMITER ;
+------------------------------------------------------------------------------------
+
+Views 
+
+-> is kind of virtual table based on some select query
+-> does not store data actually
+
+-> Join -> 10 rows ->
+
+-> View -> as a Saved Query -> which can be treated like a table
+
+View -> CustomerOrderDetails -> join customers orders
+
+-> instead of writing join query , use view as at a table
+
+Purpose ->
+
+-> Simplify Complex Queries
+-> As users -> referring to view -> not referring to original table
+-> Abstract data 
+-> More easier , more readable
+
+View for Customer Names along with Order details
+
+CustomerOrderDetails -> serve as virtual table for us
+
+//Creating a view
+Create View CustomerOrderDetails2 As
+Select Orders.Order_id, Customers.Name, Orders.Total_Amount, Orders.Status
+From Orders
+Inner Join Customers on Orders.customer_id = customers.customer_id;
+
+
+// fetching data from view
+select * from CustomerOrderDetails;
+select * from CustomerOrderDetails2 where Status='Shipped';
+
+//Delete a view
+DROP View CustomerOrderDetails;
+
+//Replace -> modify an existing view
+Create Or Replace View CustomerOrderDetails2 As
+Select Orders.Order_id, Customers.Name, Orders.Total_Amount, Orders.Status, Orders.Order_Date
+From Orders
+Inner Join Customers on Orders.customer_id = customers.customer_id;
+
+--------------------------------------------------------------------------------------
+
+Create view -> ProductSalesReport -> 
+show each Product Name , products total quantity sold and total revenue
+                                     1 -> 10,     10*Price
+-----------------------------------------------------------------------------
+
+Index
+
+-> data structure -> improves the speed of retrieval operations in a table
+
+-> select -> faster, join -> faster
+-> ensure uniqness - duplicate values
+-> faster lookup in large dbs.
+
+-> datasets -> 
+-> real applications -> million 
+
+-> select * from customers where email="ankit@gmail.com";
+   -> scanning row by row -> 
+   -> large one -> huge -> slow performing 
+
+-> Solution -> create index on email -> for faster lookups
+
+-> create index only
+
+-> queries remain same
+
+-> if index is created, MySQL is going to use that index automatically
+
+-> Create an index
+
+Create index idx_email_new on Customers(Email);
+
+-> Orders
+
+-> select * from orders where status = 'pending';
+
+Create index idx_order_status_new on Orders(Status);
+
+Composite Index : -> Multiple Columns
+
+-> select * from orders where customer_id = 1 and status ='Pending'
+
+
+Create index idx_customer_status on Orders(Customer_Id, Status);
+
+
+-> Products -> kept id is unique
+
+-> Unique Index Also -> prevent duplicate entries
+
+Create Unique index idx_prod_name on Products(Name)
+
+-> try to insert some duplicate product name
+
+-> Sorting -> based on order date -> slow operation
+
+select * from orders order By order_date desc;
+
+create index idx_sort_orderdate on Orders(Order_Date)
+
+View All Indexes :
+
+show indexes from orders;
+
+Drop an index :
+
+Drop index idx_customer_status on orders;
+
+B Trees 
+
+----------------------------------------------------------------
+Queries -> not case sensitive -> SQL 
+Data -> Case sensitive
+
+String Functions :
+
+-> manipulate and process text values
+
+-> Format data -> upper lower
+-> extract data -> substring
+-> search replace
+-> concatenate data
+
+UpperCase LowerCase :
+
+-> Fetch customer names -> 
+-> Select name, UPPER(Name) As UpperCAseName from customers;
+                LOWER
+-> Length
+   Select name, LENGTH(Name) from customers;
+
+-> COnCAT() -> combining
+
+-> customers -> first_name last_name
+select CONCAT(First_name, ' ',Last_Name) AS Full_NAme from customers;
+
+-> LEFT()                 , RIGHT() -> extract part of string
+   extract first characters  last characters
+
+select Name, LEFT(Name,3) As ShortNAme from Products;
+
+select Email, RIGHT(Email,5) from customers;
+
+-> Substring 
+
+-> extract a portion of a string
+
+Select Email, SUBSTRING(Email, LOCATE('@',Email)+1) As DomainName From customers;
+
+-> Replace
+-> Pending -> Shipped
+   
+Select Order_id, Status, REPLACE(Status, 'Pending', 'Shipped') As New_Status from orders; 
+
+TRIM() -> remove spaces from strings - unwanted space
+
+----Ankit Gupta-------
+
+-> csv files, excel sheet, -> 
+
+cleanup data -> 
+
+Form -> many extra spaces
+
+Select Name, TRIM(Name) from test;
+
+INSTR() -> find where a character appears in a string
+
+Select Email, INSTR(Email, '@') AS POsition from customers;
+
+REVERSE() -> 
+
+select Name, REVERSE(NAME) from customers;
+
+Format() -> Add thousands seperator
+
+-> Price -> Products -> 55000.00 -> 55,000.00
+
+select Price, Format(Price, 2) As ORMATEDPRICE from Products; ->
+
+Format -> internally -> thousands seperators -> 2 ( upto decimal places)
+
+select Format(550000.00, 2) As formttednumber;
+
+------------------------------------------------------------
+
+Numeric Functions :
+
+-> Round() -> specific place
+
+select Round(2345.789, 2) ;
+
+-> select Price, Round(Price, 2) from products;
+
+Ceil() Floor()
+
+-> Ceil() -> round up to nearest int
+
+-> Floor() -> round down toarest int
+
+select CEIL(567.90);
+
+select FLOOR(567.90);
+
+
+-> MoD() -> remainder 
+
+-> stock -> int 
+
+-> products with even stock 
+
+select Stock, MOD(Stock, 2) from products;
+
+-> POW() (x,y)
+-> SQRT(x)
+
+-> LEAST() -> min values
+-> GREATEST() -> max
+
+select LEAST(15, 56, 90);
+
+RAND() -> random -> generates random number between 0 and 1
+
+Discount Coupon -> 
+
+DISC
+
+select concat('DISC', CEIL(RAND()*1000)As DISC_COUPON;
+
+
+-------------------------------------------------------------------------
+
+
+Date and Time functions :
+
+currdate, currtime, format date, cals based on date
+
+select CURDATE() As TodaysDate , NOW();
+
+Format -> 
+date-mnth-yy
+
+select order_date, DATE_FORMAT(Order_date, '%d-%m-%y') As F_Date from orders;
+                                                 -%Y -> 2025
+                                                -%M -> fbruary
+                                                -%b -> Feb
+
+Extract parts of a date :
+Date -> Month -> year
+
+Select Order_date , EXtrT(YEAR From ORder_date) As Year,
+                    EXtract(MONTH from Order_date) As Month from orders;
+
+DateDIFF() 
+-> Finds the difference between two dates 
+-> order_date -> 
+   delivery_date -> 
+-> currDate and Order_date -> 
+
+select Order_Date, DATEDIFF(CURDATE(), Order_DAte) As DAysSinceOrder from orders;
+                           (delivery_date, )
+
+TIMESTAMPDIFF() -> find diff in hours
+Select Order_date , TIMESTAMPDIFF( HOUR, Order_Date, CuRDATE()) AS Hours from orders;
+
+ADDDAte(), SUBDATE()
+Add days    Subtarct Days
+
+Order Placed -> Expected Deliver Date -> 5 days
+
+Select Order_id, ADDDATE(Order_date , 5) As ExpectedDeliveryDate from orders;
+
+DAYNAME() -> Get day 
+MONTNAME() ->  
+
+Select Order_Date, 
+       DAYNAME(Order_Date) As Order_Day,
+       MonthName(Order_Date) AS Order_Month from orders;
+
+-----------------------------------------------------------------------------------
+
+Create a Table from Existing Table
+
+-> Back Up 
+-> Testing & Experminent
+
+Original Table -> As such
+Testing -> Create new from table ->
+Performance Optimization -> orders -> 5 -> 100 rows , 3 cols out of it 
+
+methods ->
+
+1. Copy structure of Existing table
+
+Create Table Orders_backup Like Orders;
+
+2. Copy structure as well as data 
+
+Create Table Orders_backup2 As
+select * from orders;
+
+3. create table Order_Opt As
+select order_id, customer_id , Status from orders;
+
+4. Copy data -> based on some condtion
+
+-> Create Table Orders_backup3 As
+select * from orders where Status = 'Shipped';
+
+-----------------------------------------------------------------------------------------
+
+TEMPORARY TABLE :
+
+-> table -> exists during a user session
+
+-> store intermediate result -> 
+-> avoid perm storage
+-> DB -> sampleData - tables
+-> multiple users -> 
+
+Case -> store -> high valued orders
+
+-> create TEMPORARY Table High_Valued_Orders As
+select * from orders where total_Amount > 15000.00;
+
+// Using custom colums
+create Temporary table ->
+
+// list of top customers
+create temporary table Top_Customers(
+    Customer_Id int,
+    Name Varchar(60),
+    Total_Spent Decimal(10,2)
+   );
+
+// insert data -> from tables already there
+
+insert into Top_Customers (Customer_Id, Name, Total_Spent)
+Select ->      Sum(Total_amount)              C            C      ?
+Join Customers Orders ->
+group by based on customer_id
+having Sum(Total_Amount) > 25000.00
+
+--------------------------------------------------------------------------------
+Triggers 
+
+-> automated action -> based on certain event 
+-> event driven
+-> Insert, Update, Delete 
+-> Before event or after event
+
+-> data consistency -> in orders table -> inserting prod quant ->
+
+-> create trigger
+-> FOR EACH ROW -> trigger will fire for every row once.
+                -> inserting multiple rows
+                -> fire trigger for each row 
+ 
+-> new row is added in order_items, quan -> update stock
+
+ DELIMITER //
+ Create TRIGGER update_stock_after_orderplaced
+ AFTER Insert On Order_Items
+ FOR EACH ROW
+ BEGIN
+      Update Products
+      SET Stock = Stock - NEW.Quantity
+      Where Product_id = NEW.Product_id;
+
+ END;
+ //
+
+try with multiple rows -> 
+
+-> BEFORE event
+
+-> insert into order items (prodid, quan)
+-> quan > stock
+-> let insert happen 
+-> error message 
+
+SIGANL SQLSTATE '45000'  -> generic, use generated error State, 
+Signal -> to generate custom message on 
+
+DELIMITER //
+Create TRIGGER check_stock_before_insert
+BEFORE Insert on Order_Items
+FOR EACH ROW
+BEGIN
+     DECLARE current_stock INT;
+      
+     Select Stock into current_stock from Products where Product_id = New.Product_id;
+
+     If current_stock < NEW.Quantity THEN
+            
+            SIGNAL SQLSTATE '45000' 
+            SET MESSAGE_TEXT = 'Insufficient stock in online shop.';
+
+     END IF;
+END;
+//
+     
+insert into order_items(Order_id, product_id, quantity, subtotal) 
+values (12,2,20,55000.00);
+
+
+-----------------------------------------------------------------------------
+
+Assgn :
+
+-> Orders -> can be deleted -> cancelled 
+-> Create Trigger 
+   on Orders table 
+   Before Event on Delete Operation
+   if order status is shipped -> delete cannot happen -> raise error
+    -> NEW -> OLD
+----------------------------------------------------------------------------------      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+JDBC
+Integrate JAva with MySQL
+why ?
+interfaces
+
+Use Case -> Movie Ticket Booking System
+
+JDBC -> 
+->Java Database Connectivity
+-> API ->
+-> allows apps to interact with relational Dbs - > MySQL, POstGre SQL, Oracle 
+-> an API 
+-> set of interfaces and classes -> establish a connection, executing SQL queries, retrieve results
+-> standard way to connect to db
+-> we were relying on vendor specific driver before JDBC
+-> ODBC -> Open Db Connectivity -> Microsoft
+-> ODBC - > Platform dependent drivers needed
+-> ODBC -> performance issues
+-> Complex -> maintenance , configuration
+-> JDBC -> more smpler, portable, platfrom independent
+
+
+-> Driver Interface 
+-> represents a driver -> to make conn with MySQL
+-> registers db driver
+-> establish conn
+-> handle communication
+-> uses DriverManager -> to load the appropriate driver
+-> Driver -> return Connection object
+
+-> Connection Interface
+-> methods() ->
+
+
+-> Library -> jar file download 
+
+MySQL Connectors jar
+
+-> package file format -> Java Classes files and metadata
+
+
+Create Tables 
+-> 
+-> Java Class ->
+
+-> Movies -> title, genre, duration
+-> Shows -> 1 -> FK -> Movies
+-> Bookings -> id, name, show, seats, date -> FK -> shows
+
+
+//Insert Data
+
+java.sql 
+
+// Statement Interface - Base Interface -> it compiles every time
+          |
+   Sub interfaces
+  -> PreparedStatement -> Extends Statement Interface
+                       -> Additional -> Precompiled SQL queries
+                                     -> use them with different values
+                                     -> movies -> insert data -> 4-5 movies
+                                     -> make use of prepStmt -> 1,-----
+                                                             -> 
+                                     -> gives an option to work with placeholders
+                                     -> insert into movies (col) values ( ?, ? , ?);
+                                     -> entering values dynamically
+                                     -> psmt -> .setInt(), setString()
+                                     -> prevent entries wrong data types
+   
+   -> statement interface -> created once 
+                          -> 
+
+  -> CallableInterface -> stored procedure
+
+-> insertData Class
+-> directly 
+
+-> Booking Facility 
+-> users should be shown -> what movies and what time slots are available
+
+-> Fighter - 6:30 PM, 8:00 PM , 9:30 PM diff dates
+   showAvailableMovies
+
+-> Add a booking -> 
+   -> BookTicket -> step 1. scanner -> user name
+                    step 2. showAvailableMovies() -> all movies 
+                    step 3. ask user to choose show id -> show id -> 1
+                    step 4. check available seats -> sql query select prepStatement -> pass show id store it in some var -> checkSeats -> executeQuery()
+                    step 5. ask user -> how many seats to be booked > noofseats
+                            if  -> checkSeats > noofseats :
+                    step 6. insert into booking table -> username, show_id, seats -> prepared statement -> executeUpdate()
+                    step 7. update shows table -> reduce seats by noofseats -> prepStatement -> executeUpdate()
+                            else
+                              print("-------------")
+
+
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+CallableStatement -> 
+
+used to execute stored procedures in database.
+-> Stored Proc -> precompiled Sql block
+-> complex queries
+-> SqL block
+-> reuse that block -> diff input 
+
+-> improve performance ->
+-> reusability -> 
+-> security -> queries are not constructed dynamically 
+-> 
+
+CallableStatement csmt = conn.perpareCall("{call procedure_name(?,?)}"); // in-1, out-2
+
+-> IN input parameters
+-> OUT output parameters
+
+? -> placeholders -> input as well as output
+prepare call -> prepare the stored proc for execution
+
+csmt.setString(1,value1);
+csmt.registerOutParamter(2,Types.Interger)(decimal)
+csmt.registerOutParamter(2,Types.Interger)(decimal)
+
+// retrieve the o/p
+int result = csmt.getInt(2);
+int result = csmt.getInt(3);
+
+-> out parameters -> single, multiple out
+-> select -> multiple rows
+-> Result Set
+-> while(rs.next())
+
+RowSet ->
+
+MetaData -> Tables, Databases
+
+---------------------------------------------------------
+
+execute()
+
+executeQuery()
+
+executeUpdate()
+
+-> purpose, return value , type SqL statements
+
+
+1. executeQuery() -> executing Select statements
+-> return type -> return a ResultSet ->
+-> used for reteieving data 
+-> nonselect stats -> SQL Execption
+
+
+2. executeUpdate()
+
+-> DML -> insert, delete, update
+-> DDL -> create, alter, drop, truncate
+-> return -> int -> represents how many rows affected -> DML
+          -> DDL -> return 0
+
+3. execute() 
+
+-> used for any SQL 
+-> return -> Boolean result -> true -> returns a result Set -> select
+                            -> false -> int , DML
+-> General Execution
+
+St   PSt  CSt
+1    1    1
+2    2    2
+3    3    3(stored procedure)
+
+---------------------------------------------------------------
+
+insert -> how many rows have been inserted
+
+int rows -> 
+
+------------------------------------------------------------------
+
+RowSet 
+
+-> javax.sql -> 
+-> extends ResultSet interface
+-> additional -> provides a disconnected, scrollable and updatedable way to handle tables data
+
+-> disconnected -> conn.close() , start conn -> execute query -> close -> print all results
+-> work even after disconnecting
+-> offline processing of data
+
+scrollable 
+-> ResultSet -> it moves forward only
+-> RowSet -> fwd , backward
+
+updateable
+-> after closing update some 
+-> reflect it to db -> 
+
+-> ResultSet -> need a persistent connection to db
+-> RowSet -> work with db, without needing a persistent connection
+
+
+JDBC -> RowSet
+
+-> JdbcRowSet -> Connected RowSet -> yes we need a connection
+                                  -> like resultSet, previous method
+-> CachedRowSet -> Disconnected rowset 
+                -> select * from table1
+                -> caches the data in memory
+                -> close the connection
+                -> print -> fwd back
+                -> allows modification
+ 
+-> WebRowSet    -> further an extension of CachedRowSet
+
+                -> supports XML based storage
+
+-> FilteredRowSet -> CachedRowSet 
+                  -> filtering capability -> selective data retrieval
+
+-> JoinRowSet -> SQL join
+              -> booking - movies
+              -> without writing a join query
+-
+-------------------------------------------------------------------->
+
+price -> 
+
+ResultSetMetaData -> Metadata -> data about data
+                  -> retrieving metadata about the columns in a resultset object
+                  -> number of columns, names of cols, data types, size of column
+                  -> alias table 
+                  -> getMetaData()
+                  -> digits -> precision (10,2)
+                  -> decimal digitd
+                  -> null value
+                  -> auto incremented yes/no
+                  -> rsmd -> 
+
+DatabaseMetaData -> metadata about the database -> conn -> 
+                 -> name, version, tables, stored proc, pk
+                 -> driver , sqlkeywords
+
+---------------------------------------------------------------------------------------
+
+Assgn -> explore ResultSetMetaData, DatabaseMetaData and their methods
+
+      -> User Login -> 
+        -> users -> userid, username, pwd, admin - boolean
+                 ->                         0
+                                            1
+
+        -> Functionality UPdate 
+        -> Main App -> choice -> login -> name, pwd
+                                       -> DDL part -> DDL, Insert -> only admin has rights
+                                 register -.> insert data into users table
+                                 login -> 
+                                            -> user can only book, view, view confir, cancellation
+
+---------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+FilteredRowSet :
+              
+                disconnected rowset
+                scrollable
+                allows filtering rows based on a custom filter
+                define custom filter
+                Predicate -> implement, interface 
+                          -> evaluate() -> override this evaluate method    
+                class -> applyFilter -> Predicate 
+                Example -> 
+                          retrieve all movie shows -> shows -> available seats
+                          custom filter -> fetch only those rows -> 50 
+                          
+                SQL  -> as >= 100 -> server side filtering
+
+                client server mmodel
+                client -> users system
+                server -> db is actually stored
+                client -> makes a request -> goes to server -> fire sql query to fetch data as per client request
+                       -> server has to respond to client
+
+                filtered row set -> implemented client side filtering
+                                 -> dynamic filtering 
+                                 -> datasets are huge -> better performance
+                                 -> reusability 
+                
+               
+ResultSetMetaData interface :
+
+                  -> Metadata -> data about structure of the result set 
+                  -> retrieving metadata about the columns in a resultset object
+                  -> number of columns, names of cols, data types, size of column
+                  -> alias table 
+                  -> getMetaData()
+                  -> digits -> precision (10,2)
+                  -> decimal digitd
+                  -> null value
+                  -> auto incremented yes/no
+                  -> rsmd -> 
+
+DatabaseMetaData -> metadata about the database -> conn -> 
+                 -> name, version, tables, stored proc, pk
+                 -> driver , sqlkeywords
+
+
+CRUD -> Create Read Update Delete
+
+-----------------------------------------------------------
+
+SDLC
+
+-> Software Development Life Cycle
+-> structured process 
+-> s/w teams 
+-> design, develop, test, deploy
+-> phases -> ensures -> s/w meets requirements, 
+                     -> delivered on time
+                     -> adhere to industry standards
+
+-> Why SDLC
+
+-> systematic -> well defined process
+-> Quality Assurance -> testing and validation
+-> Cost , Time efficient ->
+-> Risk Mgmt -> able to identify risks early
+->
+
+
+Phases of SDLC
+
+1. Requirement Analysis
+
+   -> Objective -> Gather and document business requirements, technical
+   -> Stakeholders Involved -> Buisness Analysts,  product owners, customers
+   -> Activites -> meetings with stakeholders
+                -> Create -> SRS -> S/w Requirement Specfication documents
+   -> functional, non functional
+   
+Online Shop 
+
+-> identify target audience
+-> Define -> cart mgmt, user authentication, product catalog, payment processing
+
+
+2. Feasibility Study (FS) and Planning
+
+-> Objective -> evaluate project -> cost, resources, time, technology
+-> Techincal FS -> technical -> tech stack, h/w 
+-> Economic FS -> cost effective
+-> Operational -> system -> business env
+
+-> Java MySQL React, AWS Azure GCP  
+
+3. System Design
+
+-> Objective -> Define arch, data flows, integration points
+-> HLD -> High Level Design -> sys arch, db design, modules, tech stack
+-> LLD -> Low LeveL Design
+cart mgmt -> 
+
+4. Development 
+
+-> Coding and Implementation
+-> technology
+-> version control -> GitHub
+-> implement -> CI/CD pipeline ->  Continuous Integration / Continuous Deployment -> Jenkins pipieline
+
+5. Testing 
+
+-> Objective -> bugs, issues
+
+-> Unit -> test individual component ->
+-> Integration -> checj interactions b/w modules
+-> System Testing -> validating entire application
+-> User Accepting Testing => 
+
+6.Deployment 
+-> Objective -> deploying s/w in a live environment
+-> 
+
+7. Maintenace and Support
+
+-> s/w 0-> upto date, functional
+
+-----------------------------------------------------------------------------------------------------------------
+
+Agile Mthdoldogy and Devops
+
+Use Case : Hospital Management System
+
+
+1. Waterfall Model
+
+-> sequential , linear , 
+-> each phases should be fully completed , only then go to next phase
+-> top down approach
+-> requirements are freezed
+
+-> HMS -> 1. Reqt Analysis -> paient reg, doctor schedilung, medical inventory
+         -> 
+
+-> Advs
+
+-> Cases, Areas -> structured projects -> 
+-> Well documentation
+-> Easier cost estimation
+-> Clear defined roles
+
+Dadvgs
+
+-> Rigid, Inflexible
+-> Long term projects
+
+
+------------------------------------------------------------
+
+
+Agile Methodology
+
+-> incremental and iterative approach to s/w dev
+
+-> focus -> flexibility -> adapts to changing requrs
+-> Faster delivery of working -> develop product in short cycle
+
+-> develop s/w in sprints 
+-> Framework : Scrum -> sprint based approach -> (2-4) weeks
+-> Spring Planning -> First 3=2 Weeks
+
+
+
+->                      Agile                                  Waterfall
+      zflexibilty     Highly flexible                            rigid
+       Dev Speed
+      testing          
+     Deployment      continuous deployment                      Single Deployment
+          
+
+-> Advs
+
+-> adapts to changing reqrts
+-> quick s/w delivery 
+-> contunous testing feedback
+
+
+
+------------------------------------------------------------------------------------
+
+
+Iterative Model
+
+-> s/w is developed in small increments (itertaions)
+-> initial prototype
+
+
+Spiral 
+
+-> risk driven approach  
+-> combines the elements of Waterfall and Iterative
+-> strong focus -> risk assessment 
+
+HMS:
+
+Spiral 1 : Initial Prototype Dev -> Core
+
+-> Planning -> Patient Reg, Doctor Scheduling, Basic Apptms
+-> Risk Analysis -> Will staff adapt to systems -> training to the staff
+-> Dev & Testing -> console based, test
+-> Feedback -> 
+Deliverable -> BAsic HMS
+
+Spiral 2: Enhanced -> Billling System , Payment System
+P
+RA -> online secured-> razorpay 
+DT
+Feed
+Deliverable :
+
+-----------------------------------------------------------------
+
+ HMS : Console Based Applications -> Web Based Applications
+
+Requirements 
+-> Features and Functionalities
+   -> Patient Mgmt -> Patient Details -> Add new patient, view patient infor, update ,  delete
+   -> Doctor Mgmt -> Add, view, update, delete
+   -> Appointment Schedule -> book an appointment, view, cancel
+   -> Staff -> add, view, update, delete
+
+FS -> Core Java, MySQL, 
+
+Design
+ 
+-> Database Design -> Patient Table, Doctor, Appointment, Staff
+
+Functional Req : 
+-> Menu Drive System
+-> JDBC
+-> Exceptions
+-> OOD -> OO Design -> Classes -> represent entities are tables
+                       Patient Class -> name, address, age, -------------------------
+                                        DAOClass -> Methods -> add, view, update, delete
+                                      (Data Access Objects)
+                                        addP(Patient p) -> interact with db to erform crud ops
+                       Menu Based
+
+
+Sprint 1 : 2-weeks -> Setup basic structure, set up database, Patient Mgmgt impleting
+         : Review -> 
+Sprint 2 : 
+
+--------------------------------------------------------------------------------------------------
+
+Database Design -> 
+
+
+-> Patient Table -> id int autoinc pk,  f_name, l_name, age, gender, contac_numner
+
+-> Doctor Table -> id int auto pk, name, speciality, contact
+
+-> Appointment -> id int auto pk, patient id int, doctor id, appointment date Date, reason , Fk,-> patient table
+                  FK refer doctor 
+-> Staff -> id int auto, name, role , contact_numer
+
+
+Database - HMS -> 
+
+Entity Class -> Patient
+
+DAO CLass -> PatientDAO -> interact Patient with database
+
+
+Testing -> Test Cases
+
+
+--------------------------------------------------------------------
+
+Assgn : COmplete MovieBooking
+      : Patients DOctor Completed
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ -> Appointment Schedule -> book an appointment,   view,         cancel
+                                  insert           select        delete
+    -> Entity Class - Appointment
+    -> DAO
+    -> Checks -> patient id -> registered ->
+                 Doctor id -> should be in doctors tables
+
+ -> Staff -> add, view, update, delete
+               -> CRUD <-
+
+
+HMS Application
+
+1. add patient, 2. delete, 
+
+1 - 8
+
+Running Main HMS 
+
+-> HMS Application Main Class
+
+-> Switch Case ()
+      |
+-> Main Menu -> 1. Manage Patients
+                2. Manage Doctors
+                3. Manage Appointments 
+                4. Manage Staff
+
+-> Choice -> 1. -> method -> managePatients() -> (1-4) ->
+
+             2. -> call method -> manageDoctors() -> (1-4) ->
+     
+             3. -> call -> manageAppointmnets() -> (1-3) ->
+               
+             4. -> manageStaff() -> 
+
+---------------------------------------------------------------------
+
+Models -> SDLC
+
+-> Waterfall, Agile, Interative, Spiral
+
+-> V- model
+-> (Verification and Validation) Model
+-> extension of Waterfall Model -> testing happens simultaneously with developemnet
+
+-> LeftSIde -> Planning -> Design -> Implementing
+ -> RIght SIde -> Unit Testing (Each functional unit), Integration Testing , System Testing
+
+-> Advs -> errors are found early, reduce cost effort
+-> Best fro projects -> requs are known in advance 
+-> adv improved s/w quality
+
+
+Requirement -> Acceptance Testing
+System Design -> Sytem Testing
+High Level Design -> Integration Testing
+Lowl Level Design -> Unit
+
+---------------------------------------------------------
+
+Big Bang Model
+
+-> high risk , high reward approach to s/w development
+
+-> No formal planning of process is followed
+-> All resources -> time, money, effort are used directly
+-> Also Development and testing -> sim
+-> Final product is give in one go
+
+
+-> BEst For -> small projects -> unplanned reqs
+            -> quick delivery -> 
+            -> experimental s/w -> R&D 
+-> NOt Best -> Large and Complex -> 
+
+-> development starts immediately
+
+-> HMS -> not good Big Bang
+-> Clinic -> Big Bang Model
+
+------------------------------------------------------------
+
+Prototype Model
+
+-> At first -> before building final system
+            -> build a working prototype -> basic version of s/w
+            -> look like model - prototype
+            -> early model
+            -> Feedback from stakeholders -> 
+            -> refine the prototype - multiple refinements
+            -> final products
+
+Best For  -> reqs are unclear
+          -> need more user interaction , feedbacks
+
+Not -> requs are well deinfed
+    ->  
+
+Increased Dev Time, higher cost
+
+-------------------------------------------------------
+
+RAD -> Rapid Application Development
+    -> agile based approach 
+    -> focus -> fast development, prototype, feedback, iterative
+    -> Rapid prototying , iterations
+    -> freq feedbacks are needed
+    -> parallel development -> 5 components -> speed up delivery
+    -> less focus on planning, more focus -> developing and testing
+
+Best -> Projects -> tight deadlines -> quick delivery
+                 -> requs are evolving
+Not for -> Large, complex -> security 
+        -> 
+
+-----------------------------------------------------
+
+Incremental Model
+
+-> evolutionary SDLC model
+-> develop system in small parts(increments)
+-> Each increment -> adds some functionality to the existing system
+   -> created, tested, review
+   -> gaming app - game , added some new functionality
+   -> move to next one
+   -> customers have a working product
+   -> 
+
+Best For -Large projects -> broke into smaller module
+         - continuous increments -> feedback 
+
+-------------------------------------------------------
+
+JAD -> Joint Application Development
+    -> collaborative -> participation from users, developers, business analyst, stakeholders
+    ->  conduct joint workshops 
+    -> multiple brainstorming sessions 
+    -> focused on gathering reqs -> 
+    -> alignments -> with business 
+    -> active participation
+
+----------------------------------------------------------
+
+Fish Model 
+
+-> structured testing approach 
+-> focus on early detection of defects 
+-> thro rigorous req analysis and validation before coding begins
+-> testing is given impoeratance from beg 
+-> parallel activity -> 
+-> stable s/w system 
+
+reqt analysis -> testing starts
+
+Best For -> Large projects -> critical -> defense system, health system
+                           -> strict control 
+                           -> army 
+
+------------------------------------------------------------
+
+Hybrid Model
+
+-> Agile Model + Prototype 
+
+
+------------------------------------------------------------------
+
+ Software Testing :
+
+-> evaluate and verify -> working as expected
+-> reliable, efficient , 
+-> ?Unit -> individual components
+-> Integration, System, Accepantance
+
+-> Myth -> 
+-> 1. testing is done only after dev completes
+   2. if it works in dev env -> it will work in prod too
+     development environment -> production environment
+       (developing)                 (deploy)
+     OS, N/w, Db performance 
+   3. Automated Testing s/w -> manually testing is replaced
+      tasks -> repetitive -> 
+      manual testing -> exploratory testing, scenarios - human mind 
+
+-> QA, QC, Testing
+-> QA -> Quality Assurance 
+      -> proactive process -> prevent defects before they happen
+      -> ensuring quality in product ->  
+
+   QC -> Quality Control -> 
+      -> reactive process -> 
+      -> find defects in actual product
+      -> identifying defects and fixing them
+
+   Testing -> subset of QC ->
+           -> execution point of view -> detect defects
+
+ISO Standards
+
+-> ISO -> testing process is consistent and ensures quality
+   -> ISO/IEC 9126 -> functonlity, reliablility, usability 
+
+Types
+
+-> Functional Testing -> 
+-> Non Functional Testing -> performance, security, 
+-> UNit ----------------
+-> Regression -> ensures that changes in s/w -> existing functionality dont break
+
+
+Junit Framework 
+
+-> testing framework -  designed for unit testing
+-> write tests, 
+-> provides an API for writing and running the tests 
+-> test can be organised into test cases 
+   -> check the outcomes -> assertions
+-> Core Features of Junit
+   -> Annotations -> uses annotations -> define test -> lifecycle methods
+   -> Assertions -> used to compare expected results with actual results
+                                    (3)                   (3)
+    -> Test Runners -> Junit tests are executed using Test Runners 
+                    -> run test in a specific order
+-> Junit Versions 
+   
+   Junit 3 -> used TestCase -> as the base class -> to write tests
+   Junit 4 -> introduced annotations, run tests with paramters
+   Junit 5 -> more improvements, use lambda expressions
+
+----------------------------------------------------------------------
+
+Codes :
+
+package Junit;
+
+public class Calculator {
+	
+	
+	public int add(int a, int b) {
+		return a+b;
+	}
+	
+	public int sub(int a, int b) {
+		return a-b;
+	}
+
+	public Object add(Object object, Object object2) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public int div(int i, int j) {
+		// TODO Auto-generated method stub
+		return i/j;
+	}
+
+
+}
+--------------------------------------------------
+
+package Junit;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
+
+class CalculatorTest {
+	Calculator calc = new Calculator();
+
+	@Test // -> Annotation
+	void testAdd() {
+		
+		Calculator calc = new Calculator();
+		// functionality -> actual result
+	   // assertions -> match in expected result, actual result
+		// assertEquals
+		assertEquals(15, calc.add(5, 10)); // test case for add method 4 sets of values
+	}
+
+	@Test
+	void testSub() {
+		
+		Calculator calc = new Calculator();
+		assertEquals(-5, calc.sub(5, 10)); // test case for sub method
+		
+	}
+	
+	// assertTrue(condition) -> verify that condition is true
+	// assertFalse(conidtion) -> verify that cond is flase
+	
+	@Test
+	void testConditionT() {
+		Calculator calc = new Calculator();
+		assertTrue(calc.add(2,9)>0); // if result is positive
+	}
+	
+	@Test
+	void testConditionF() {
+		Calculator calc = new Calculator();
+		assertFalse(calc.sub(9,8)<0); // is result is positive > product - stock > 0
+	}
+	
+	// assertNull -> check object is null
+	// assertNotNull -> check object is not null
+	
+	@Disabled("This is currently diasbled")
+	@Test
+	void testNull() {
+		Calculator calc = new Calculator();
+		assertNull(calc.add(null, null)); // validate null case
+	}
+	
+	@Disabled("This is currently diasbled")
+	@Test
+	void testNotNull() {
+		Calculator calc = new Calculator();
+		assertNotNull(calc.add(2,8)); // validate not null result
+	}
+	
+	// Parameterized Tests
+	// scenario -> run the same test with different sets of data
+	// similar test cases
+	// use @ParameterizedTest , source of arguments -> @ValueSource
+	
+	@ParameterizedTest
+	@ValueSource(ints = {12,15,16,17}) // item1 -12+10 -22,
+	void testAddParam(int number) { // number -> from valuesource
+		Calculator calc = new Calculator();
+		assertEquals(number+10, calc.add(number,10)); 
+	}
+	
+	// 6 tests + 4 times -> 10 cases will run
+	
+	// use @ParameterizedTest , source of arguments -> @CsvSource
+	@ParameterizedTest
+	@CsvSource ({
+		"5, 7, 12",
+		"3, 6, 9",
+		"7, 5, 12",
+		"8, 9, 17"
+		
+	})
+	// a b  expected
+	void testAddParamCsv(int a, int b, int expected) { // csv source
+		Calculator calc = new Calculator();
+		assertEquals(expected, calc.add(a, b));
+	} // run for 4 sets -> 
+	
+	// Timeouts for Test
+	// few tests -> too long to run -> infinte loop, performance issues, 
+	// assetTimeout , Junit 4 - Test -> timeout param
+	// fail -> longer time
+	
+	@Test
+	void testTimeout() {
+		assertTimeout(java.time.Duration.ofMillis(1000),() -> {
+			
+			// Simulate
+			Thread.sleep(200);
+			calc.add(2,3);
+			
+		});
+	}
+	
+	// Disable the test 
+	// Junit 4 -> @Ignore
+	// Junit 5 -> @Disbaled -> skiiping those test
+	
+	// Testing Exceptions
+	// assertThrows(Exception class -> method call) -> 	
+	// pass -> exception is thrown
+	@Test
+	void testException() {
+		
+		// add div method
+		ArithmeticException exception = assertThrows(ArithmeticException.class, () -> {
+			calc.div(12,2);
+		});
+		
+	
+	}
+	
+	
+	
+	
+	
+}
+---------------------------------------------------------------------------
+
+
+package Junit;
+
+public class OrderService {
+	
+	private int stock=10;
+	private double discount=0.10; //10%
+	
+	public int getStock() {
+		return stock;
+	}
+	public void setStock(int stock) {
+		this.stock = stock;
+	}
+	public double getDiscount() {
+		return discount;
+	}
+	public void setDiscount(double discount) {
+		this.discount = discount;
+	}
+	
+	// calculate order price
+	public double calPrice(double price, int quantity) {
+		return price*quantity*(1-discount);
+	}
+	
+	public boolean placeOrder(int quantity) {
+		if (quantity > stock) {
+			throw new IllegalArgumentException("Insufficient stock");
+		}
+		stock -= quantity;
+		return true;
+	}
+	
+	
+	// create OrderServiceTest Class
+	// @Test -> testInsufficientStocks -> assertthrows
+	// @Test -> calclualate Total -> price, quantity -> expected, func cal
+
+}
+----------------------------------------------------------------------
+
+Apps -> HMS, MovieTicketBooking 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+-> sprints
+-> 2-4 weeks
+-> scrum framework
+-> JIRA tool
+
+
+------------------------------------------------
+
+
+MySQL backup
+
+-> movie_booking, hms,
+-> all databases 
+
+-> Logical backup -> backup database objects -> tables -> in .sql format
+                  -> restore 
+                  -> mysqldump
+
+mysqldump -u root -p movie_booking > C:\MySqlBackup\movie_booking.sql -> for one database
+
+mysqldump -u root -p --all-databases > C:\MySqlBackup\all+dbs.sql -> all dbs
+
+mysqldump -u root -p movie_booking booking > C:\MySqlBackup\bookingtable.sql -> backup of only booking table
+
+// schema backup no data
+
+mysqldump -u root -p --no-data movie_booking > C:\MySqlBackup\movie_booking_schema.sql
+
+-----------------------------------------------------------------------------------------
+
+Codes :
+
+package Junit;
+
+public class OrderService {
+	
+	private int stock=10;
+	private double discount=0.10; //10%
+	
+	public int getStock() {
+		return stock;
+	}
+	public void setStock(int stock) {
+		this.stock = stock;
+	}
+	public double getDiscount() {
+		return discount;
+	}
+	public void setDiscount(double discount) {
+		this.discount = discount;
+	}
+	
+	// calculate order price
+	public double calPrice(double price, int quantity) {
+		return price*quantity*(1-discount);
+	}
+	
+	public boolean placeOrder(int quantity) {
+		if (quantity > stock) {
+			throw new IllegalArgumentException("Insufficient stock");
+		}
+		stock -= quantity;
+		return true;
+	}
+	
+	
+	// create OrderServiceTest Class
+	// @Test -> testInsufficientStocks -> assertthrows
+	// @Test -> calclualate Total -> price, quantity -> expected, func cal
+
+}
+
+----------------------------------------------------------------------
+
+package Junit;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
+
+class OrderServiceTest {
+
+	OrderService orderService = new OrderService();
+	
+	// calTotal ->  for certain quanity
+	@Test
+	void testCalTotal() {
+		
+		double total = orderService.calPrice(100.00,2); //actual result -> 200,180
+		assertEquals(180, total, "Total should be 180 after 10% discount");
+		
+	}
+	
+	// sufficient stock
+	// testPlaceOrder() -> placeorder(5) -> succeed -> assertTrue
+	// stock should reduce to 5, assertEquals (5, getStock())
+	
+	// insufficientstock
+	// placeorder(15) -> assertThrows -> IllegalArgExpection
+	// assertEquals("Insufficient Stock", var.getmsg());
+	
+	// boundary cases
+	// exception cases
+	
+	// caltotal -> with 0 quantity
+	// quantity = 0, total will always be 0
+    // assertEquals(0,)
+	
+	// Parameterise test Case
+	// @CsvSource -> 4 sets -> (price, quant, expected value)
+	// multiple cases
+	
+	// Timeout -> time -> 1000
+	// orderprocessingtest ->
+	// sleep -> 500, 1500
+	
+	// MultiThread Test
+	// placeorder -> parallely -> 2 orders
+	// 1st order -> 2
+	// 2nd order -> 1
+	// final stock -> 7
+	
+	// // beforeall, aftereach, afterall -> methods -> println
+	// before all -> print -> runs once for all tests
+	// after all -> print runs once after all tests
+	// @Disabled
+	// after each -> running after every test
+	
+	// Test Suite
+	
+	// group multiple test classes
+	// 3 test classes
+	// run them as a single unit 
+	// logical -> 
+	//           1. unit cases
+	//           2. covering edge cases
+	//           3. concurrency control 
+	
+	// @Suite  -> class -> Junit test suite
+	// @SelectClases -> mention what all test classes you need to run
+	// @test, @param
+	
+	@Test
+	void testPlaceOrderMultithread() throws InterruptedException {
+		Thread thread1 = new Thread(() -> orderService.placeOrder(2));
+		Thread thread2 = new Thread(() -> orderService.placeOrder(1));
+		
+		thread1.start();
+		thread2.start();
+		
+		thread1.join();
+		thread2.join();
+		
+		assertEquals(7, orderService.getStock());	
+		
+	}	
+	
+}
+-------------------------------------------------------------------------------
+
+package Junit;
+
+public class OrderService2 {
+	
+	private int stock=10;
+	private double discount=0.10; //10%
+	
+	public int getStock() {
+		return stock;
+	}
+	public void setStock(int stock) {
+		if(stock < 0)
+		{
+			throw new IllegalArgumentException("Stock cannot be negative.");
+		}
+		this.stock = stock;
+	}
+	public double getDiscount() {
+		return discount;
+	}
+	public void setDiscount(double discount) {
+		if(discount <0 || discount >1) {
+			throw new IllegalArgumentException("Discount should be between 0 and 1.");
+		}
+		this.discount = discount;
+	}
+	
+	// calculate order price
+	public double calPrice(double price, int quantity) {
+		
+		if(price < 0) {
+			throw new IllegalArgumentException("Price cannot be negative.");
+		}
+		if(quantity < 0) {
+			throw new IllegalArgumentException("Quantity cannot be negative.");
+		}
+		
+		return price*quantity*(1-discount);
+	}
+	
+	public boolean placeOrder(int quantity) {
+		if(quantity < 0) {
+			throw new IllegalArgumentException("Quantity cannot be negative.");
+		}
+		
+		if (quantity > stock) {
+			throw new IllegalArgumentException("Insufficient stock");
+		}
+		stock -= quantity;
+		return true;
+	}
+
+}
+
+----------------------------------------------------------------------------
+
+package Junit;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.stream.Stream;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
+
+class OrderService2Test {
+	
+	private OrderService2 orderService2;
+	
+	@BeforeEach  // initialize orderservice2 before each test case 
+	public void setUp() {
+		orderService2 = new OrderService2();
+		
+	}
+	
+	
+
+	@Test
+	public void TestCalPrice_ValidInputs() {
+		double price = 100.00;
+		int quantity = 2;
+		double expectedPrice = price*quantity*(1-orderService2.getDiscount());
+		assertEquals(expectedPrice, orderService2.calPrice(price, quantity)); // cakPrice
+	}
+	
+	@SuppressWarnings("deprecation")
+	@Test
+	public void TestCalPrice()
+	{
+		double price =110.00;
+		int quantity =2;
+		double expectedPrice= price*quantity*(1-orderService2.getDiscount());
+//		System.out.println(expectedPrice+" ="+ os2.calPrice(price, quantity));
+		assertEquals(expectedPrice, orderService2.calPrice(price, quantity));
+	}
+	
+	
+	// successfully place order -> assertTrue, 
+	
+	// positive cases
+	// Negative tests cases
+	
+	// order with zero quantity
+	// order where price is negative
+	
+	// Boundary Test Cases Edge Cases
+	
+	// quantity exactly same as stock
+	
+	// order just below stock limit -> stock 10 -> ordering 9
+	
+	// ----------------------------------------------------------------------
+	
+	// Exceptional Cases 
+	
+	// place order beyond stock
+	// set stock -> -ve stock
+	// set discount -> (0-1), 1.5 -> 
+	// negative price 
+	// negative quantity
+	
+	// ---------------------------------------------------------------------------
+	
+    // Parameterized test -> @CsvSource, @ValueSource, @MethodSource
+
+
+	// csv source -. cal price -> 4 sets - valid
+	// price, q, expected
+	
+	
+	// test to check valid order placements with different quantities
+	// (1,4,7,10) 
+	
+	// test to check for boundary conditions for placing orders
+	// values -> 11, 13, 15
+	
+	// test to check for invalid discounts
+	// values -> -0.5, 1.5, 2.0
+	
+	// test to check invalid stock values
+	// values -> -5, -10, -15
+	
+	//test fir negative price and negative qua
+	// csv source -. cal price -> 4 sets
+    // "100.0, -5"
+	// "100.0, 5"
+	// "-50.0, -2"
+	
+	@ParameterizedTest
+    @CsvSource({
+        "-100.0, 5", 
+        "100.0, -5", 
+        "-50.0, -2"
+    })
+    public void testCalculatePrice_NegativeValues_ThrowsException(double price, int quantity) {
+	
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            orderService2.calPrice(price, quantity);
+        });
+        assertTrue(exception.getMessage().contains("cannot be negative"));
+    }
+
+	
+	// -----------------------------------------------------------------------------
+	
+	@Test
+    public void OrderNegativeQuantity() {
+        int quantity = -1;
+        assertThrows(IllegalArgumentException.class, () -> {
+        	orderService2.placeOrder(quantity);
+        });
+    }
+	
+	
+	// methodsource -> getting values from method
+	// static methods -> stream of values
+	
+	// test for valid stock values
+	
+	static Stream<Integer> validStockValues() {
+		return Stream.of(0, 10, 20, 30);
+	}
+	
+	@ParameterizedTest
+	@MethodSource("validStockValues")
+    public void tetstValidStockValues(int stock) {
+		orderService2.setStock(stock);
+		assertEquals(stock,orderService2.getStock() );
+	}
+	
+	
+	// vaulesource -> replace that with method source
+	// csv source ->
+	
+	static Stream<Arguments> testValidInputs() {		
+		return Stream.of(				 
+				// Arguments.of ( 100, 2, 180)
+				org.junit.jupiter.params.provider.Arguments.of(100.00, 2, 180.0),
+				org.junit.jupiter.params.provider.Arguments.of(100.00, 3, 270.0),
+				org.junit.jupiter.params.provider.Arguments.of(100.00, 4, 360.0)
+				);		
+	} // csv source
+	
+	// @ParameterizedTest
+	// @MethodSource("testValidInputs")
+	// method def
+	
+	// modify parameterized test -> with method source
+	
+	
+	// method source -> int , double, -.> lists, maps, data structures
+	// csv source -> primitive types
+	
+	// fetching data dynamically
+	
+	// readability, modfidictaions
+
+}
+--------------------------------------------------------------------------
+
+package Junit;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+
+public class OrderService2MultiThreadTest {
+	
+    private OrderService2 orderService2;
+	
+	@BeforeEach  // initialize orderservice2 before each test case 
+	public void setUp() {
+		orderService2 = new OrderService2();
+		
+	}
+	
+	// Simulate 10 threads concurrently -> placing order -> quantity -> placing with quantity 1
+	// Multithreading -> Executor service -> create a fixed thread pool -> 10 
+	
+	@Test
+	public void testPlaceOrderMultiThread() throws InterruptedException {
+		
+		int threadCount = 10;
+		ExecutorService executor = Executors.newFixedThreadPool(threadCount);
+		CountDownLatch latch = new CountDownLatch(threadCount);
+		
+		for (int i=0 ; i<threadCount; i++) {
+			executor.execute(() -> {
+				try {
+					orderService2.placeOrder(1);
+				}catch (Exception e) {System.out.println(e.getMessage());} // non crtitical task
+			});
+			latch.countDown();
+		}
+		latch.await(); // wait for all threads to finish
+		executor.shutdown();
+		
+		// initial stock as 10
+		// concurrently 10 threads are running -> placeorder -> 1 quan each -> final stock -> 0
+		
+		assertEquals(0, orderService2.getStock());
+		
+		
+	}
+
+}
+---------------------------------------------------------------------
+
+package Junit;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
+
+class Example {
+
+	
+	// beforeall -> run before all tests -> run once only
+	// beforeEach -> running for all tests
+	
+	// AfterEach -> Run after every test -> 
+	// afterAll -> Run after all tests -> run once only 
+	
+	@Test
+	void test() {
+		fail("Not yet implemented");
+	}
+
+}
+
+-------------------------------------------------------------------
+
+package Junit;
+
+import org.junit.platform.suite.api.SelectClasses;
+import org.junit.platform.suite.api.Suite;
+
+@Suite
+@SelectClasses({
+	OrderServiceTest.class,
+	OrderService2Test.class,
+	//OrderService2MultiThreadTest.class,
+	
+})
+public class OrderServiceTestSuite {
+	
+	// empty , serving as a test suite container
+
+}
+
+-------------------------------------------------------------------------------
+
+Spring Framework
+
+-> core, aop, jdbc, web
+
+-> powerful, lightweight framework 
+-> provides infrastructure support for Java applications
+-> enterprise level apps, web based apps
+-> open source
+
+Why ?
+
+-> Lightwieght -> uses POJOs (Plain old java objects) -> build apps -> 
+-> Modular approach -> modules -> core, aop, jdbc, data, 
+-> DI -> Dependency Injection ->
+-> Integration support -> JDBC, JPA, Hibernate and other framewworks
+-> Transaction Management ->
+
+Key Modules
+
+-> Core -> fundamnetals -> IoC, DI
+-> AOP -> Aspect Oriented Programming
+-> MVC -> framework -> web applications -> html pages, forms
+-> Boot -> module for building applications quickly without minimal configurations
+        -> 
+-> Data -> Spring framework -> integration for JDBC
+-> Security -> authentication and authorization mechanism
+-> Cloud -> microservices applications , scalabale
+
+Core Concepts of Spring Framework
+
+IoC, DI
+
+-> IoC -> Inversion of COntrol
+          -> The framework is now handling object creation instead of developer manually instantiating them
+-> DI -> Dependency Injection
+      -> employee -> address  -> 
+      -> dependencies are injected into objects by the Spring container
+-> Beans -> java object -> spring framework -> fundamental
+-> Beans Lifecycle -> manage beans, creation of beans - destruction of beans
+-> Spring Containers -> responsible for managing beans -> ApplicationContext
+
+-> XML Configuration, Annoatations
+
+-> setup the projects :
+
+eclipse :
+
+pom.xml
+
+-> Project Object Model
+-> define the configurations, dependencies 
+-> build, test, deploy
+
+EMS Application :
+
+-> model classes
+
+  -> Address ->
+  -> department ->
+  -> Employee -> use address, department
+  -> performance -> 
+  -> hr -> list of employee
+  -> payroll -> 
+
+
+
+XML Based configuration
+
+-> beans -> java objects
+-> beans will get injected 
+   -> setter injection
+   -> constructor injection
+   -> Collections -> collection injection
+
+
+-> in main class -> ApplicationContext
+
+-> interface -> instantiate, configure, add beans, destroy beans,
+-> created -> extended from BeanFactory interface -> 
+-> standard bean lifecycle
+
+-> classPathxmlappli-> 
+
+
+Annotation based configuration
+
+-> class -> which serve as configuration class
+-> annotations -> 
+ 
+   -> @Bean -> create beans
+ 
+-> class level annotation
+    
+   -> @Configuration -> tis class contains spring beans definitions
+   -> @ComponentScan(basePackages = " " ) -> automatically detect and register spring components within specified package
+
+
+-> First method
+@Bean 
+new address() -> 
+
+-> spring is going to manage means 
+
+-> 
+
+-> Second Method
+-> make use of application.properties file
+               -> provide all values in this file
+               -> configuration file -> annotations -> fetch values from application.properties file
+               -> @Value
+
+-> Bean Scopes 
+-> by default -> singleton scope -> only one instance gets created asn reused aaplication
+
+-> ref emp1 -> employee
+-> emp2 -> employee
+
+-> Loosely Coupling
+
+Employees () {
+
+private Address address = new Address(); // 
+
+inject different 
+
+employee -> methods -> getannualsalary(), print employee(), 
+
+services based on these model classes
+
+-> Annotations
+
+-> @Service -> Spring service component -> automatically detect and instantiate using component scan
+
+-> @Component -> @Service specialized version of component annotation -> dedicated to provide business logic
+
+-> @Autowired -> tell spring to inject employee bean 
+
+
+--------------------------------------------------------------------------
+
+
+Capstone Project :
+
+1. Teams -> 2 or 3 members
+2. Start thinking on idea
+3. Web Application
+4. Spring Web, MySQL, React as Front End
+5. SRS Document 
+
+
+----------------------------------------------------
+
+Assgn :
+
+Create all four services classes and test them.
+
+----------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> model classes
+
+-> configured them in appconfig
+
+-> service layer -> inject beans automatically
+
+
+----------------------------------------------------------------
+
+Second Method
+-> make use of application.properties file
+               -> provide all values in this file
+               -> configuration file -> annotations -> fetch values from application.properties file
+               -> @Value
+
+----------------------------------------------------
+
+Spring JDBC
+
+-> module of spring framework
+-> abstraction over JDBC API
+-> simplifying process of interacting with relational database
+-> boilerplate code - reduces 
+-> resources management will be handled automate
+
+-> perform db operations -> more efficient , cleaner, leas prone error
+-> CRUD operations
+
+-> Why ?
+-> Eliminate boilerplate code
+-> maintainability better, readability
+-> integration with other framework -> Hibernate, JPA
+
+Components
+
+-> JdbcTemplate -> primary class that simpligy db ops
+                -> query(), update(), execute()
+-> RowMapper -> interface -> maps row from the result set to Java objects
+             -> map column names to object fields
+-> ResultSetExtractor -> result set -> 
+-> Data SOurce -> db connections effeiciently
+
+Application Flow :
+
+-> Obtain a datasource -> application.properties
+-> inject the datasource into jdbctemplate
+-> jdbctemplate execute queries
+-> handling resultsets -> using rowmapper
+
+
+-> spring initialzr
+-> jdbc dependency
+-> MySQL connector
+
+-> including jar file in our project
+
+application structure :
+
+application.proerpties -> data source
+.sql files -> 1.create database schema
+              2.sample data inserting 
+-> configure .sql files -> intitalized
+
+-> schema.sql ->  create tables
+-> data.sql -> sample data
+
+-> model classes
+-> repository
+-> service package
+
+online book shop -> books, authors, orders
+
+spring.sql.init.mode = ALWAYS, NEVER (Disable), EMBEDDED -> H2 Db (in memory db)
+
+AuthorRepository
+
+-> 
+Spring repository intereact with MySQL db using Spring JDBC -> JdbcTemplate -> CRUD operations
+
+
+JdbcTemplate -> spring JDBC utility -> simplifies db operations
+
+-> RowMapper<T> -> Maps SQL result sets to Java Objects
+
+-> @Repository -> spring marks this class as DAO layer -> Data Access Object, 
+
+
+Services 
+
+-> Controllers -> test them using api -> postman
+
+-> CommandLineRunner
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+web based application
+
+-> controllers
+-> apis to test the services
+
+-> CommandLineRunner
+   -> Test the services
+
+-> Spring Module - AOP
+  -> implement 
+
+-> web based -> HTML, CSS, JavaScript
+-> web based application - spring MVC
+
+------------------------------------------------------------------------
+
+
+CommandLineRunner
+
+-> functional interface
+-> aplciation has started 
+   -> perform initialization taks,
+   -> setup operations
+   -> testing logic
+
+-> single method -> run(String... args)
+
+--------------------------------------------------------
+
+Spring AOP -> Aspect Oriented Programming
+
+-> apart from business logic -> 
+-> cross cutting concerns -> logging, security, performance monitory, management - transaction
+-> service layer -> log all the methods -> how much execution time
+
+-> logging feature -> 
+-> Aspects - class , annotate it with aspect
+   -> define which cross cutting concerns 
+
+-> AOP -> allows us to inject behaviour -> with methods
+  -> service layer -> inject certain behbour
+ -> before -> logging
+ -> after -> logging
+ -> around the methods
+
+-> actual method code -> it will not be modified
+
+-> duplicate boilerplate code 
+
+-> follows DRY -> Dont Repeat Yourself
+   -> avoiding reducndant code across 
+
+-> addBook(){
+   print(loggin)
+   functionality
+   print(logging)
+
+-> separate these things -> logging aspect
+
+Terminology
+
+-> Aspect -> Module that contain cross cutting concerns -> Class
+-> Advice -> Actual code logic -> method
+-> Pointcut -> defines where the advice should be applied -> which methods or in classes
+-> Joinpoint -> specific execution point in application -> method execution. constructor 
+-> Weaving -> process of linking aspects with the target class during
+
+Advice
+
+-> diff types
+-> @Before -> run before the target method.
+-> @After -> after the target method completes -> (success or failure)
+-> @AfteReturning -> runs after a method successfully returns a value
+-> @AfterThrowing -> Runs -> if an exception if thrown from method
+-> @Around -> runs before and after the method execution
+
+-> Add AOP dependency
+
+
+Valid responses
+
+HTML Pages 
+
+CSS ->
+
+JavaScript -> 
+
+Flow of a Web Application :
+
+Step 1 :  User request a URL -> http://localhost:7878/
+
+-> http://localhost:7878/books/
+-> http://localhost:7878/authors
+
+Step 2 : SB app route the request using a controller method 
+
+-> displaying the default home page
+-> We will be adding a controller layer -> @Controller
+-> things to handle the request
+
+Step 3 : Controller layer fetch data from a service layer -> buisness logic layer
+
+Step 4 : Service layer interact with the database using a repository
+
+Step 5 : Retrieved data is added to Model -> and then pass to HTML page (view layer)
+
+Step 5 : view layer pages -> index.html -> returned to web browser
+
+
+-------------------------------------------------------------------------------
+
+
+Welcome to Online Book Shop
+
+Table Structure :
+
+BookID   Title   Author   Price
+
+-> some 3 rows to it
+
+
+use css to style your table.
+
+
+------------------------------------------------------
+
+javascript 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
