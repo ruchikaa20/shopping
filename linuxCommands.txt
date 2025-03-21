@@ -1,0 +1,160 @@
+chmod 644 - 6 - owner - r,w,-x
+	    4 - group - r,-w,-x
+	    4 - others - r,-w,-x
+
+chmod 600 - 6 - owner - r,w,-x
+	    0 - group - no perm
+	    0 - others - no perm
+ 
+1  pwd
+    2  ls
+    3  cd ..
+    4  uname -a
+    5  ls
+    6  cd home
+    7  mkdir home
+    8  ls
+    9  cd home
+   10  touch myfile.txt
+   11  ls
+   12  echo "First linux file" > myfile.txt
+   13  cat myfile.txt
+   14  cp myfile.txt myfile2.txt
+   15  ls
+   16  cat myfile2.txt
+   17  mv myfile2.txt newfile.txt
+   18  ls
+   19  mkdir user
+   20  ls
+   21  mv newfile.txt /home/user
+   22  mv newfile.txt /home/user/
+   23  ls
+   24  mv newfile.txt /home/user
+   25  mv newfile.txt /user
+   26  mv newfile.txt /user
+   27  cd ..
+   28  ls
+   29  cd Desktop/
+   30  mkdir home
+   31  ls
+   32  cd home
+   33  touch myfile.txt
+   34  echo "First linux file" > myfile.txt
+   35  cat myfile.txt
+   36  cp myfile.txt myfile2.txt
+   37  mkdir user
+   38  mv myfile2.txt newfile.txt
+   39  ls
+   40  cat newfile.txt
+   41  mv newfile.txt /user
+   42  cd user
+   43  pwd
+   44  cd ..
+   45  mv newfile.txt /c/Users/703417515/Desktop/home/user
+   46  mv newfile.txt /c/Users/703417515/Desktop/home/user
+   47  cd user
+   48  ls
+   49  cd ..
+   50  echo "First linux file" > testfile.txt
+   51  ls
+   52  cat testfile.txt
+   53  rm testfile.txt
+   54  ls
+   55  mkdir user2
+   56  cd user2
+   57  echo "First linux file" > testfile.txt
+   58  ls
+   59  cd ..
+   60  ls
+   61  rm -r user2
+   62  ls
+   63  cd user
+   64  ls
+   65  cd ..
+   66  find /home/user -name "newfile.txt"
+   67  find /c/Users/703417515/Desktop/home/user -name "newfile.txt"
+   68  locate newfile.txt
+   69  ls
+   70  du -sh myfile.txt
+   71  du -h
+   72  df -h
+   73  ls -l
+   74  ls -a
+   75  ls -lh
+   76  ls -r
+   77  mkdir -p folder1/subfolder1/subfolder2
+   78  ls
+   79  ls -r
+   80  cd filder1
+   81  cd folder1
+   82  ls
+   83  cd subfolder1
+   84  ls
+   85  cd ..
+   86  cd ..
+   87  mv folder1 username
+   88  ls
+   89  cd username
+   90  ls
+   91  cd ..
+   92  cd ..
+   93  cd home/username
+   94  cd ..
+   95  cd user
+   96  pwd
+   97  cd ..
+   98  cd ..
+   99  cd home/username
+  100  mv subfolder1 /c/Users/703417515/Desktop/home/user
+  101  ls
+  102  cd ..
+  103  cd user
+  104  ls
+  105  find /c/Users/703417515/Desktop/home -name "subfolder1"
+  106  cd ..
+  107  ls -l
+  108  chmod 750 myfile.txt
+  109  printenv
+  110  echo $HOME
+  111  echo $USER
+  112  echo $SHELL
+  113  echo $PATH
+  114  echo $PWD
+  115  echo $LANG
+  116  echo $EDITOR
+  117  echo $HISTSIZE
+  118  ps aux
+  119  ping google.com
+  120  nestat -tulnp
+  121  netstat -tulnp
+  122  top
+  123  ls -l | less
+  124  ls
+  125  cat myfile.txt
+  126  cat myfile.txt | grep "Second"
+  127  cat myfile.txt | grep "file"
+  128  ls -l | less myfile.txt
+  129  sort myfile.txt
+  130  cat myfile.txt | grep "Second"
+  131  ls -l | less myfile.txt
+  132  wc myfile.txt
+  133  cd ..
+  134  ls -l | cut -d' ' -f1\
+  135  ls -l | cut -d' ' -f1
+  136  ls -l | awk '{print $9, $5}'
+  137  cd home
+  138  ls -l | awk '{print $9, $5}'
+  139  sed 's/File/TestFile/' myfile.txt
+  140  sed 's/file/TestFile/' myfile.txt
+  141  cat myfile.txt | grep "linux" | sort | uniq -c
+  142  sed -n '1,5p' myfile.txt -print lines from 1 to 5 from myfile.txt
+  143  sed -n '1,5p' myfile.txt
+  144  display dirs. list
+  145  ls -l | cut -d' ' -f1
+  146  wc myfile.txt
+  147  sort myfile.txt
+  148  ls -l | sort -k5 -n
+  149  ls -l | awk '{print $9, $5}'
+  150  sed -n '1p' myfile.txt
+  151  clr
+  152  history
