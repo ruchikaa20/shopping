@@ -1,1 +1,19 @@
 hello world
+Responsible AI – Mitigating Bias
+
+Understanding Bias in AI Systems
+Bias in AI systems refers to systematic and unfair discrimination that arises when algorithms reflect or amplify human prejudices present in training data or design choices. These biases can negatively impact users and society by reinforcing stereotypes, causing unfair treatment, and reducing trust in AI applications. For example, a generative AI tool used by a Global Bank might unintentionally favor certain demographics when recommending loan approvals, leading to social inequality and reputational damage.
+
+Strategies to Mitigate Bias
+
+1. Diverse and Representative Training Data
+Ensuring that AI systems are trained on data sets that reflect the diversity of real-world populations can significantly reduce bias. For example, a Retail Giant could audit and expand its customer data to include varied demographics before training an AI-driven chatbot. Regular reviews and updates to the training data ensure that the AI system adapts to evolving societal norms.
+
+
+2. Bias Testing and Algorithm Audits
+Implementing regular bias testing throughout the AI development lifecycle is critical. Companies can use fairness metrics to assess outputs and conduct independent audits of AI models. For instance, a Pharma Company might run periodic audits of its AI-based recruitment system to ensure equitable candidate selection across different groups.
+
+
+
+Effective Implementation
+Both strategies should be integrated into an organization's AI governance framework, with dedicated teams responsible for monitoring, reporting, and correcting biases. Continuous education of developers and stakeholders about ethical AI practices further strengthens bias mitigation efforts.
